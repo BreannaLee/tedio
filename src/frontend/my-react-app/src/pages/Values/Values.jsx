@@ -3,8 +3,10 @@ import UserDetailsContext from '../../context/userDetailsContext';
 
 // submit button should send a json of all values
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const Values = () => {
-  const { values, setUserDetails } = useContext(UserDetailsContext)
+  const { age, values, setUserDetails } = useContext(UserDetailsContext)
   const [localValues, setLocalValues] = useState([]);
 
   // useEffect(() => {
@@ -47,18 +49,13 @@ const Values = () => {
   };
 
   const SendUserData = async () => {
-    const data = useContext(UserDetailsContext)
-    console.log("this is the data we're about to send: ", data)
-    // console.log("this is the age we're about to send: ", UserDetailsContext.Provider.age)
     const userData = {
-      age: data.age,
-      value_list: ['test713', 'test7131', 'test7132']
-      
+      age: age,
+      value_list: localValues
     }
     try {
-      console.log("Sending user data: ")
-      // console.log()
-      const response = await fetch('http://localhost:5000/send_user_data', {
+      console.log("Sending user data: ", userData)
+      const response = await fetch(`${API_URL}/send_user_data`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
